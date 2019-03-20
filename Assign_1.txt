@@ -1,0 +1,636 @@
+Microsoft Windows [Version 10.0.17763.316]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Users\ShivamTayal>mysql -u root
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 5.7.25 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql> create database jdbc_test1
+    -> ;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use jdbc_test1;
+Database changed
+mysql> CREATE TABLE Persons (
+    ->     ID int NOT NULL,
+    ->     LastName varchar(255) NOT NULL,
+    ->     FirstName varchar(255),
+    ->     Age int,
+    ->     PRIMARY KEY (ID)
+    -> );
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> desc Persons;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| ID        | int(11)      | NO   | PRI | NULL    |       |
+| LastName  | varchar(255) | NO   |     | NULL    |       |
+| FirstName | varchar(255) | YES  |     | NULL    |       |
+| Age       | int(11)      | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+4 rows in set (0.01 sec)
+
+mysql> ALTER TABLE Persons
+    -> ADD CONSTRAINT PK_Person PRIMARY KEY (ID,LastName);
+ERROR 1068 (42000): Multiple primary key defined
+mysql> ALTER TABLE Persons
+    -> ADD CONSTRAINT PK_Person PRIMARY KEY (ID);
+ERROR 1068 (42000): Multiple primary key defined
+mysql> desc Persons;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| ID        | int(11)      | NO   | PRI | NULL    |       |
+| LastName  | varchar(255) | NO   |     | NULL    |       |
+| FirstName | varchar(255) | YES  |     | NULL    |       |
+| Age       | int(11)      | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> ADD CONSTRAINT PK_Person;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ADD CONSTRAINT PK_Person' at line 1
+mysql> ALTER TABLE Persons
+    -> ADD CONSTRAINT PK_Person;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> CREATE TABLE Animals (
+    -> Categoey varchar(255) NOT NULL,
+    -> Name varchar(255),
+    -> NoOfThem int,
+    -> PRIMARY KEY (cATEGORY)
+    -> );
+ERROR 1072 (42000): Key column 'cATEGORY' doesn't exist in table
+mysql> CREATE TABLE Animals (
+    -> Categoey varchar(255) NOT NULL,
+    -> Name varchar(255),
+    -> NoOfThem int,
+    -> PRIMARY KEY (Category)
+    -> );
+ERROR 1072 (42000): Key column 'Category' doesn't exist in table
+mysql> CREATE TABLE Animals (
+    -> Category varchar(255) NOT NULL,
+    -> Name varchar(255),
+    -> NoOfThem int,
+    -> PRIMARY KEY (Category)
+    -> );
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> desc Animals;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| Category | varchar(255) | NO   | PRI | NULL    |       |
+| Name     | varchar(255) | YES  |     | NULL    |       |
+| NoOfThem | int(11)      | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> ALTER TABLE Persons
+    -> ADD Category varchar(255);
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc Persons;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| ID        | int(11)      | NO   | PRI | NULL    |       |
+| LastName  | varchar(255) | NO   |     | NULL    |       |
+| FirstName | varchar(255) | YES  |     | NULL    |       |
+| Age       | int(11)      | YES  |     | NULL    |       |
+| Category  | varchar(255) | YES  |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> ALTER TABLE ANIMALS
+    -> MODIFY COLUMN Category varchar(255)
+    -> ,
+    -> FOREIGN KEY (Category) REFERENCES Persons (Category);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FOREIGN KEY (Category) REFERENCES Persons (Category)' at line 4
+mysql> ALTER TABLE ANIMALS
+    -> MODIFY COLUMN Category varchar(255)
+    -> ,
+    -> FOREIGN KEY (Category) REFERENCES Persons(Category);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FOREIGN KEY (Category) REFERENCES Persons(Category)' at line 4
+mysql> ALTER TABLE ANIMALS
+    -> MODIFY COLUMN Category varchar(255)
+    -> FOREIGN KEY (Category) REFERENCES Persons(Category);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FOREIGN KEY (Category) REFERENCES Persons(Category)' at line 3
+mysql> DROP TABLE Animals;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
++----------------------+
+| Tables_in_jdbc_test1 |
++----------------------+
+| persons              |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql> create database work;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use work;
+Database changed
+mysql> create table department (id varchar(10) not null, name varchar(100) not null,primary key(id));
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> desc departmentl
+    -> ;
+ERROR 1146 (42S02): Table 'work.departmentl' doesn't exist
+mysql> desc department;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| id    | varchar(10)  | NO   | PRI | NULL    |       |
+| name  | varchar(100) | NO   |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> create table country (id varchar(10) not null, name varchar(100) not null,primary key(id));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> desc country;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| id    | varchar(10)  | NO   | PRI | NULL    |       |
+| name  | varchar(100) | NO   |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> create table employees (id int not null auto_increment, name varchar(100) not null,age int not null,gender varchar(50) not null,deptID varchar(10) not null,countrycode varchar(10) not null ,primary key(id), foreign key(deptID) references department (id), foreign key(countrycode) references country(id));
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> desc employees;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| id          | int(11)      | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(100) | NO   |     | NULL    |                |
+| age         | int(11)      | NO   |     | NULL    |                |
+| gender      | varchar(50)  | NO   |     | NULL    |                |
+| deptID      | varchar(10)  | NO   | MUL | NULL    |                |
+| countrycode | varchar(10)  | NO   | MUL | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> alter table employees add column lastupdate timestamp;
+Query OK, 0 rows affected (0.15 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employees;
++-------------+--------------+------+-----+-------------------+-----------------------------+
+| Field       | Type         | Null | Key | Default           | Extra                       |
++-------------+--------------+------+-----+-------------------+-----------------------------+
+| id          | int(11)      | NO   | PRI | NULL              | auto_increment              |
+| name        | varchar(100) | NO   |     | NULL              |                             |
+| age         | int(11)      | NO   |     | NULL              |                             |
+| gender      | varchar(50)  | NO   |     | NULL              |                             |
+| deptID      | varchar(10)  | NO   | MUL | NULL              |                             |
+| countrycode | varchar(10)  | NO   | MUL | NULL              |                             |
+| lastupdate  | timestamp    | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+--------------+------+-----+-------------------+-----------------------------+
+7 rows in set (0.00 sec)
+
+mysql> alter table department add column id int not null auto_increment;
+ERROR 1060 (42S21): Duplicate column name 'id'
+mysql> drop table employees;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> drop table department;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> drop table country;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table department (id int not null auto_increment,code varchar(10) not null, name varchar(100) not null,primary key(id,code));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> desc department;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| id    | int(11)      | NO   | PRI | NULL    | auto_increment |
+| code  | varchar(10)  | NO   | PRI | NULL    |                |
+| name  | varchar(100) | NO   |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+
+3 rows in set (0.01 sec)
+
+mysql> create table country (id int not null auto_increment,code varchar(10) not null, name varchar(100) not null,primary key(id,code));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> decs country;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'decs country' at line 1
+mysql> desc country;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| id    | int(11)      | NO   | PRI | NULL    | auto_increment |
+| code  | varchar(10)  | NO   | PRI | NULL    |                |
+| name  | varchar(100) | NO   |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> create table employees (id int not null auto_increment, name varchar(100) not null,age int not null,gender varchar(50) not null,deparment varchar(10) not null,country varchar(10) not null ,primary key(id), foreign key(department) references department (code), foreign key(country) references country(code));
+ERROR 1072 (42000): Key column 'department' doesn't exist in table
+mysql> create table employees (id int not null auto_increment, name varchar(100) not null,age int not null,gender varchar(50) not null,department varchar(10) not null,country varchar(10) not null ,primary key(id), foreign key(department) references department (code), foreign key(country) references country(code));
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> desc country;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| id    | int(11)      | NO   | PRI | NULL    | auto_increment |
+| code  | varchar(10)  | NO   | PRI | NULL    |                |
+| name  | varchar(100) | NO   |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> create table employees (id int not null auto_increment, name varchar(100) not null,age int(5) not null,gender varchar(10) not null,department varchar(10) not null,salary int not null, designation varchar(50) not null, country varchar(10) not null ,lastUpdate timestamp, primary key(id), foreign key(department) references department(code), foreign key(country) references country(code));
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> alter table department rename to departments;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> alter table country rename to countries;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table employees (id int not null auto_increment, name varchar(100) not null,age int(5) not null,gender varchar(10) not null,department varchar(10) not null,salary int not null, designation varchar(50) not null, country varchar(10) not null ,lastUpdate timestamp, primary key(id), foreign key(department) references departments(code), foreign key(country) references countries(code));
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> alter table departments drop column id;
+Query OK, 0 rows affected (0.18 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table countries drop column id;d;
+Query OK, 0 rows affected (0.18 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'd' at line 1
+mysql> alter table countries drop column id;
+ERROR 1091 (42000): Can't DROP 'id'; check that column/key exists
+mysql> desc departments;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| code  | varchar(10)  | NO   | PRI | NULL    |       |
+| name  | varchar(100) | NO   |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc countries;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| code  | varchar(10)  | NO   | PRI | NULL    |       |
+| name  | varchar(100) | NO   |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> create table employees (id int not null auto_increment, name varchar(100) not null,age int(5) not null,gender varchar(10) not null,department varchar(10) not null,salary int not null, designation varchar(50) not null, country varchar(10) not null ,lastUpdate timestamp, primary key(id), foreign key(department) references departments(code), foreign key(country) references countries(code));
+Query OK, 0 rows affected (0.12 sec)
+
+mysql> des employees;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'des employees' at line 1
+mysql> desc employees;
++-------------+--------------+------+-----+-------------------+-----------------------------+
+| Field       | Type         | Null | Key | Default           | Extra                       |
++-------------+--------------+------+-----+-------------------+-----------------------------+
+| id          | int(11)      | NO   | PRI | NULL              | auto_increment              |
+| name        | varchar(100) | NO   |     | NULL              |                             |
+| age         | int(5)       | NO   |     | NULL              |                             |
+| gender      | varchar(10)  | NO   |     | NULL              |                             |
+| department  | varchar(10)  | NO   | MUL | NULL              |                             |
+| salary      | int(11)      | NO   |     | NULL              |                             |
+| designation | varchar(50)  | NO   |     | NULL              |                             |
+| country     | varchar(10)  | NO   | MUL | NULL              |                             |
+| lastUpdate  | timestamp    | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+--------------+------+-----+-------------------+-----------------------------+
+9 rows in set (0.00 sec)
+
+mysql> insert into departments(code,name) values('FSD','Full Stack Development');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into departments(code,name) values('BD','Bussiness Development');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into departments(code,name) values('HR','Human Resources');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into departments(code,name) values('SALES','Marketing');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from departments;
++-------+------------------------+
+| code  | name                   |
++-------+------------------------+
+| BD    | Bussiness Development  |
+| FSD   | Full Stack Development |
+| HR    | Human Resources        |
+| SALES | Marketing              |
++-------+------------------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into countries(code,name) values('UK','United Kingdom');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into countries(code,name) values('IND','India');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into countries(code,name) values('USA','America');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into countries(code,name) values('NZ','New Zealand');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from countries;
++------+----------------+
+| code | name           |
++------+----------------+
+| IND  | India          |
+| NZ   | New Zealand    |
+| UK   | United Kingdom |
+| USA  | America        |
++------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into employees(name,age,gender,department,salary,designation,country,lastUpdate) values('Joey',32,'Male','Actor',37950,'Manhatten',NOW());
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into employees(name,age,gender,department,salary,designation,country,lastUpdate) values('Joey',32,'Male','Acting',37950,'Actor','Manhatten',NOW());
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`work`.`employees`, CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`department`) REFERENCES `departments` (`code`))
+mysql> select * from employees;
+Empty set (0.00 sec)
+
+mysql> insert into employees(name,age,gender,department,salary,designation,country,lastUpdate) values('Joey',32,'Male','Acting',37950,'Actor','Manhatten',NOW());
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`work`.`employees`, CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`department`) REFERENCES `departments` (`code`))
+mysql> insert into employees(name,age,gender,department,salary,designation,country,lastUpdate) values('Joey',32,'Male','Bussiness development',37950,'Actor','America',NOW());
+ERROR 1406 (22001): Data too long for column 'department' at row 1
+mysql> insert into employees(name,age,gender,department,salary,designation,country,lastUpdate) values('Joey',32,'Male','BD',37950,'Actor','USA',NOW());
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees;
++----+------+-----+--------+------------+--------+-------------+---------+---------------------+
+| id | name | age | gender | department | salary | designation | country | lastUpdate          |
++----+------+-----+--------+------------+--------+-------------+---------+---------------------+
+|  3 | Joey |  32 | Male   | BD         |  37950 | Actor       | USA     | 2019-03-18 17:42:59 |
++----+------+-----+--------+------------+--------+-------------+---------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> insert into employees(name,age,gender,department,salary,designation,country,lastUpdate) values('Chandler',35,'Male','SALES',87950,'Advertise','UK',NOW());
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees;
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+| id | name     | age | gender | department | salary | designation | country | lastUpdate          |
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+|  3 | Joey     |  32 | Male   | BD         |  37950 | Actor       | USA     | 2019-03-18 17:42:59 |
+|  4 | Chandler |  35 | Male   | SALES      |  87950 | Advertise   | UK      | 2019-03-18 17:44:29 |
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+2 rows in set (0.00 sec)
+
+mysql> insert into employees(name,age,gender,department,salary,designation,country,lastUpdate) values('Monica',35,'Female','HR',87950,'Chef','IND',NOW());
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees;
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+| id | name     | age | gender | department | salary | designation | country | lastUpdate          |
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+|  3 | Joey     |  32 | Male   | BD         |  37950 | Actor       | USA     | 2019-03-18 17:42:59 |
+|  4 | Chandler |  35 | Male   | SALES      |  87950 | Advertise   | UK      | 2019-03-18 17:44:29 |
+|  5 | Monica   |  35 | Female | HR         |  87950 | Chef        | IND     | 2019-03-18 17:45:34 |
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into employees(name,age,gender,department,salary,designation,country,lastUpdate) values('Phoebe',35,'Female','FSD',87950,'Massuese','NZ',NOW());
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into employees(name,age,gender,department,salary,designation,country,lastUpdate) values('Rachel',35,'Female','SALES',57950,'Fashion','USA',NOW());
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from employees;
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+| id | name     | age | gender | department | salary | designation | country | lastUpdate          |
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+|  3 | Joey     |  32 | Male   | BD         |  37950 | Actor       | USA     | 2019-03-18 17:42:59 |
+|  4 | Chandler |  35 | Male   | SALES      |  87950 | Advertise   | UK      | 2019-03-18 17:44:29 |
+|  5 | Monica   |  35 | Female | HR         |  87950 | Chef        | IND     | 2019-03-18 17:45:34 |
+|  6 | Phoebe   |  35 | Female | FSD        |  87950 | Massuese    | NZ      | 2019-03-18 17:46:32 |
+|  7 | Rachel   |  35 | Female | SALES      |  57950 | Fashion     | USA     | 2019-03-18 17:47:18 |
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> select e.id,e.name,c.name from employees e,countries c where e.country=c.code;
++----+----------+----------------+
+| id | name     | name           |
++----+----------+----------------+
+|  5 | Monica   | India          |
+|  6 | Phoebe   | New Zealand    |
+|  4 | Chandler | United Kingdom |
+|  3 | Joey     | America        |
+|  7 | Rachel   | America        |
++----+----------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> select e.id,e.name,c.name as 'Country Name' from employees e inner join countries c where e.country=c.name and c.code='IND';
+Empty set (0.00 sec)
+
+mysql> select e.id,e.name,c.name as 'Country Name' from employees e inner join countries c where e.country='IND';
++----+--------+----------------+
+| id | name   | Country Name   |
++----+--------+----------------+
+|  5 | Monica | India          |
+|  5 | Monica | New Zealand    |
+|  5 | Monica | United Kingdom |
+|  5 | Monica | America        |
++----+--------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> select e.id,e.name,c.name as 'Country Name' from employees e inner join countries c where e.country=c.code and c.code='IND';
++----+--------+--------------+
+| id | name   | Country Name |
++----+--------+--------------+
+|  5 | Monica | India        |
++----+--------+--------------+
+1 row in set (0.00 sec)
+
+mysql> select d.name, count(*) as Total from employees e, departments d where e.department=d.code group by e.department;
++------------------------+-------+
+| name                   | Total |
++------------------------+-------+
+| Bussiness Development  |     1 |
+| Full Stack Development |     1 |
+| Human Resources        |     1 |
+| Marketing              |     2 |
++------------------------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select d.name,e.salary from departments d, employees e where e.department=d.code and e.salary>50000;
++------------------------+--------+
+| name                   | salary |
++------------------------+--------+
+| Marketing              |  87950 |
+| Human Resources        |  87950 |
+| Full Stack Development |  87950 |
+| Marketing              |  57950 |
++------------------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select c.name,avg(e.salary) as Average from countries c,employees e where e.country=c.code group by e.country;
++----------------+------------+
+| name           | Average    |
++----------------+------------+
+| India          | 87950.0000 |
+| New Zealand    | 87950.0000 |
+| United Kingdom | 87950.0000 |
+| America        | 47950.0000 |
++----------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select d.name,avg(e.salary) as Average from departments d,employees e where e.department=c.code group by e.department;
+ERROR 1054 (42S22): Unknown column 'c.code' in 'where clause'
+mysql> select d.name,avg(e.salary) as Average from departments d,employees e where e.department=d.code group by e.department;
++------------------------+------------+
+| name                   | Average    |
++------------------------+------------+
+| Bussiness Development  | 37950.0000 |
+| Full Stack Development | 87950.0000 |
+| Human Resources        | 87950.0000 |
+| Marketing              | 72950.0000 |
++------------------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select c.name,count(e.id) as Total from countries c,employees e where e.country=c.code group by e.country having count(e.id)>2;
+Empty set (0.00 sec)
+
+mysql> select c.name,count(e.id) as Total from countries c,employees e where e.country=c.code group by e.country having count(e.id)>1;
++---------+-------+
+| name    | Total |
++---------+-------+
+| America |     2 |
++---------+-------+
+1 row in set (0.00 sec)
+
+mysql> select d.name,count(e.id) as Total from departments d,employees e where e.department=d.code group by e.department having count(e.id)>1;
++-----------+-------+
+| name      | Total |
++-----------+-------+
+| Marketing |     2 |
++-----------+-------+
+1 row in set (0.00 sec)
+
+mysql> select d.name,count(e.id) as Total from departments d,employees e where e.department=d.code group by e.department having count(e.id)>2;
+Empty set (0.00 sec)
+
+mysql> select * from employees;
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+| id | name     | age | gender | department | salary | designation | country | lastUpdate          |
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+|  3 | Joey     |  32 | Male   | BD         |  37950 | Actor       | USA     | 2019-03-18 17:42:59 |
+|  4 | Chandler |  35 | Male   | SALES      |  87950 | Advertise   | UK      | 2019-03-18 17:44:29 |
+|  5 | Monica   |  35 | Female | HR         |  87950 | Chef        | IND     | 2019-03-18 17:45:34 |
+|  6 | Phoebe   |  35 | Female | FSD        |  87950 | Massuese    | NZ      | 2019-03-18 17:46:32 |
+|  7 | Rachel   |  35 | Female | SALES      |  57950 | Fashion     | USA     | 2019-03-18 17:47:18 |
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> select d.name, e.name from departments d,employees e where e.department=d.code and e.name like 'e%';
+Empty set (0.00 sec)
+
+mysql> select d.name, e.name from departments d,employees e where e.department=d.code and e.name like '%e%';
++------------------------+----------+
+| name                   | name     |
++------------------------+----------+
+| Bussiness Development  | Joey     |
+| Marketing              | Chandler |
+| Full Stack Development | Phoebe   |
+| Marketing              | Rachel   |
++------------------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select d.name, e.name from departments d,employees e,countries c where e.department=d.code and e.name like '%e%' group by e.country having count(c.code)>1;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'work.d.name' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select d.name as DepartmentName, e.name as EmployeeName from departments d,employees e where e.department=d.code and e.name like '%e%';
++------------------------+--------------+
+| DepartmentName         | EmployeeName |
++------------------------+--------------+
+| Bussiness Development  | Joey         |
+| Marketing              | Chandler     |
+| Full Stack Development | Phoebe       |
+| Marketing              | Rachel       |
++------------------------+--------------+
+4 rows in set (0.00 sec)
+
+mysql> select d.name, e.name from departments d,employees e,countries c where e.department=d.code and e.name like '%e%' group by e.country having count(e.country)>1;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'work.d.name' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select d.name, e.name from departments d,employees e,countries c where e.country=c.code and e.name like '%e%' group by e.country having count(c.code)>1;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'work.d.name' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select d.name, e.name from departments d,employees e,countries c where e.country=c.code and e.name like '%e%' group by e.country having count(e.country)>1;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'work.d.name' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select d.name, e.name from departments d,employees e,countries c where e.country=c.code;
++------------------------+----------+
+| name                   | name     |
++------------------------+----------+
+| Bussiness Development  | Joey     |
+| Full Stack Development | Joey     |
+| Human Resources        | Joey     |
+| Marketing              | Joey     |
+| Bussiness Development  | Chandler |
+| Full Stack Development | Chandler |
+| Human Resources        | Chandler |
+| Marketing              | Chandler |
+| Bussiness Development  | Monica   |
+| Full Stack Development | Monica   |
+| Human Resources        | Monica   |
+| Marketing              | Monica   |
+| Bussiness Development  | Phoebe   |
+| Full Stack Development | Phoebe   |
+| Human Resources        | Phoebe   |
+| Marketing              | Phoebe   |
+| Bussiness Development  | Rachel   |
+| Full Stack Development | Rachel   |
+| Human Resources        | Rachel   |
+| Marketing              | Rachel   |
++------------------------+----------+
+20 rows in set (0.00 sec)
+
+mysql> select d.name, e.name from departments d,employees e,countries c where e.country=c.code group by e.department;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'work.d.name' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select d.name, e.name from departments d,employees e,countries c where e.country=c.code group by d.code;
+ERROR 1055 (42000): Expression #2 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'work.e.name' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select d.name as Department, e.name as Name,c.name as Country from departments d,employees e,countries c where e.country=c.code and e.department=d.code;
++------------------------+----------+----------------+
+| Department             | Name     | Country        |
++------------------------+----------+----------------+
+| Human Resources        | Monica   | India          |
+| Full Stack Development | Phoebe   | New Zealand    |
+| Marketing              | Chandler | United Kingdom |
+| Bussiness Development  | Joey     | America        |
+| Marketing              | Rachel   | America        |
++------------------------+----------+----------------+
+5 rows in set (0.00 sec)

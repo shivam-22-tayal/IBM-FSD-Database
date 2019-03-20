@@ -1,0 +1,261 @@
+Microsoft Windows [Version 10.0.17763.316]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Users\ShivamTayal>mysql -u root
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 14
+Server version: 5.7.25 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2019, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| jdbc_test1         |
+| mysql              |
+| performance_schema |
+| sys                |
+| work               |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use work;
+Database changed
+mysql> desc departments;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| code  | varchar(10)  | NO   | PRI | NULL    |       |
+| name  | varchar(100) | NO   |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> select * from departments;
++-------+------------------------+
+| code  | name                   |
++-------+------------------------+
+| BD    | Bussiness Development  |
+| FSD   | Full Stack Development |
+| HR    | Human Resources        |
+| SALES | Marketing              |
++-------+------------------------+
+4 rows in set (0.00 sec)
+
+mysql> desc countries;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| code  | varchar(10)  | NO   | PRI | NULL    |       |
+| name  | varchar(100) | NO   |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> select * from countries;
++------+----------------+
+| code | name           |
++------+----------------+
+| IND  | India          |
+| NZ   | New Zealand    |
+| UK   | United Kingdom |
+| USA  | America        |
++------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> desc employees;
++-------------+--------------+------+-----+-------------------+-----------------------------+
+| Field       | Type         | Null | Key | Default           | Extra                       |
++-------------+--------------+------+-----+-------------------+-----------------------------+
+| id          | int(11)      | NO   | PRI | NULL              | auto_increment              |
+| name        | varchar(100) | NO   |     | NULL              |                             |
+| age         | int(5)       | NO   |     | NULL              |                             |
+| gender      | varchar(10)  | NO   |     | NULL              |                             |
+| department  | varchar(10)  | NO   | MUL | NULL              |                             |
+| salary      | int(11)      | NO   |     | NULL              |                             |
+| designation | varchar(50)  | NO   |     | NULL              |                             |
+| country     | varchar(10)  | NO   | MUL | NULL              |                             |
+| lastUpdate  | timestamp    | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
++-------------+--------------+------+-----+-------------------+-----------------------------+
+9 rows in set (0.01 sec)
+
+mysql> select * from employees;
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+| id | name     | age | gender | department | salary | designation | country | lastUpdate          |
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+|  3 | Joey     |  32 | Male   | BD         |  37950 | Actor       | USA     | 2019-03-18 17:42:59 |
+|  4 | Chandler |  35 | Male   | SALES      |  87950 | Advertise   | UK      | 2019-03-18 17:44:29 |
+|  5 | Monica   |  35 | Female | HR         |  87950 | Chef        | IND     | 2019-03-18 17:45:34 |
+|  6 | Phoebe   |  35 | Female | FSD        |  87950 | Massuese    | NZ      | 2019-03-18 17:46:32 |
+|  7 | Rachel   |  35 | Female | SALES      |  57950 | Fashion     | USA     | 2019-03-18 17:47:18 |
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> select e.id,e.name,c.name from employees e,countries c where e.country=c.code;
++----+----------+----------------+
+| id | name     | name           |
++----+----------+----------------+
+|  3 | Joey     | America        |
+|  4 | Chandler | United Kingdom |
+|  5 | Monica   | India          |
+|  6 | Phoebe   | New Zealand    |
+|  7 | Rachel   | America        |
++----+----------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> select e.id,e.name,c.name as 'Country Name' from employees e inner join countries c where e.country='IND';
++----+--------+----------------+
+| id | name   | Country Name   |
++----+--------+----------------+
+|  5 | Monica | India          |
+|  5 | Monica | New Zealand    |
+|  5 | Monica | United Kingdom |
+|  5 | Monica | America        |
++----+--------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> mysql> select e.id,e.name,c.name as 'Country Name' from employees e inner join countries c where e.country=c.code and c.code='IND';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'mysql> select e.id,e.name,c.name as 'Country Name' from employees e inner join c' at line 1
+mysql> select e.id,e.name,c.name as 'Country Name' from employees e inner join countries c where e.country=c.code and c.code='IND';
++----+--------+--------------+
+| id | name   | Country Name |
++----+--------+--------------+
+|  5 | Monica | India        |
++----+--------+--------------+
+1 row in set (0.00 sec)
+
+mysql> select d.name, count(*) as Total from employees e, departments d where e.department=d.code group by e.department;
++------------------------+-------+
+| name                   | Total |
++------------------------+-------+
+| Bussiness Development  |     1 |
+| Full Stack Development |     1 |
+| Human Resources        |     1 |
+| Marketing              |     2 |
++------------------------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select d.name,e.salary from departments d, employees e where e.department=d.code and e.salary>50000;
++------------------------+--------+
+| name                   | salary |
++------------------------+--------+
+| Marketing              |  87950 |
+| Human Resources        |  87950 |
+| Full Stack Development |  87950 |
+| Marketing              |  57950 |
++------------------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select c.name,avg(e.salary) as Average from countries c,employees e where e.country=c.code group by e.country;
++----------------+------------+
+| name           | Average    |
++----------------+------------+
+| India          | 87950.0000 |
+| New Zealand    | 87950.0000 |
+| United Kingdom | 87950.0000 |
+| America        | 47950.0000 |
++----------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select d.name,avg(e.salary) as Average from departments d,employees e where e.department=d.code group by e.department;
++------------------------+------------+
+| name                   | Average    |
++------------------------+------------+
+| Bussiness Development  | 37950.0000 |
+| Full Stack Development | 87950.0000 |
+| Human Resources        | 87950.0000 |
+| Marketing              | 72950.0000 |
++------------------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select c.name,count(e.id) as Total from countries c,employees e where e.country=c.code group by e.country having count(e.id)>1;
++---------+-------+
+| name    | Total |
++---------+-------+
+| America |     2 |
++---------+-------+
+1 row in set (0.00 sec)
+
+mysql> select d.name,count(e.id) as Total from departments d,employees e where e.department=d.code group by e.department having count(e.id)>1
+    -> ;
++-----------+-------+
+| name      | Total |
++-----------+-------+
+| Marketing |     2 |
++-----------+-------+
+1 row in set (0.00 sec)
+
+mysql> select d.name, e.name from departments d,employees e where e.department=d.code and e.name like '%e%';
++------------------------+----------+
+| name                   | name     |
++------------------------+----------+
+| Bussiness Development  | Joey     |
+| Marketing              | Chandler |
+| Full Stack Development | Phoebe   |
+| Marketing              | Rachel   |
++------------------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select d.name as Department, e.name as Name,c.name as Country from departments d,employees e,countries c where e.country=c.code and e.department=d.code;
++------------------------+----------+----------------+
+| Department             | Name     | Country        |
++------------------------+----------+----------------+
+| Bussiness Development  | Joey     | America        |
+| Marketing              | Chandler | United Kingdom |
+| Human Resources        | Monica   | India          |
+| Full Stack Development | Phoebe   | New Zealand    |
+| Marketing              | Rachel   | America        |
++------------------------+----------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> select concat('Hello',name) from employee;
+ERROR 1146 (42S02): Table 'work.employee' doesn't exist
+mysql> select concat('Hello',name), NOW() from employee;
+ERROR 1146 (42S02): Table 'work.employee' doesn't exist
+mysql> select name concat('Hello',name), NOW() from employee;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '('Hello',name), NOW() from employee' at line 1
+mysql> select concat('Hello',name), NOW() from employee;
+ERROR 1146 (42S02): Table 'work.employee' doesn't exist
+mysql> select concat('Hello',name), NOW() from employees;
++----------------------+---------------------+
+| concat('Hello',name) | NOW()               |
++----------------------+---------------------+
+| HelloJoey            | 2019-03-19 12:47:36 |
+| HelloChandler        | 2019-03-19 12:47:36 |
+| HelloMonica          | 2019-03-19 12:47:36 |
+| HelloPhoebe          | 2019-03-19 12:47:36 |
+| HelloRachel          | 2019-03-19 12:47:36 |
++----------------------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> select concat('Hello ',name), NOW() from employees;
++-----------------------+---------------------+
+| concat('Hello ',name) | NOW()               |
++-----------------------+---------------------+
+| Hello Joey            | 2019-03-19 12:50:14 |
+| Hello Chandler        | 2019-03-19 12:50:14 |
+| Hello Monica          | 2019-03-19 12:50:14 |
+| Hello Phoebe          | 2019-03-19 12:50:14 |
+| Hello Rachel          | 2019-03-19 12:50:14 |
++-----------------------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from employees;
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+| id | name     | age | gender | department | salary | designation | country | lastUpdate          |
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+|  3 | Joey     |  32 | Male   | BD         |  37950 | Actor       | USA     | 2019-03-18 17:42:59 |
+|  4 | Chandler |  35 | Male   | SALES      |  87950 | Advertise   | UK      | 2019-03-18 17:44:29 |
+|  5 | Monica   |  35 | Female | HR         |  87950 | Chef        | IND     | 2019-03-18 17:45:34 |
+|  6 | Phoebe   |  35 | Female | FSD        |  87950 | Massuese    | NZ      | 2019-03-18 17:46:32 |
+|  7 | Rachel   |  35 | Female | SALES      |  57950 | Fashion     | USA     | 2019-03-18 17:47:18 |
++----+----------+-----+--------+------------+--------+-------------+---------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql>
