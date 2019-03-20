@@ -1,0 +1,30 @@
+Microsoft Windows [Version 10.0.17763.316]
+(c) 2018 Microsoft Corporation. All rights reserved.
+
+C:\Users\ShivamTayal>mysqldump -u root -p work > c:\Users\ShivamTayal\Desktop\work_bkp.sql
+Enter password:
+
+C:\Users\ShivamTayal>mysql < [work_bkp].sql
+The system cannot find the file specified.
+
+C:\Users\ShivamTayal>mysql < c:\Users\ShivamTayal\Desktop\[work_bkp].sql
+The system cannot find the file specified.
+
+C:\Users\ShivamTayal>mysql < c:\Users\ShivamTayal\Desktop\work_bkp.sql
+ERROR 1045 (28000): Access denied for user 'ODBC'@'localhost' (using password: NO)
+
+C:\Users\ShivamTayal>mysql -u root -p --database=work < c:\Users\ShivamTayal\Desktop\work_bkp.sql
+Enter password:
+
+C:\Users\ShivamTayal>mysql -u root -p --database=work < c:\Users\ShivamTayal\Desktop\work_restore.sql
+The system cannot find the file specified.
+
+C:\Users\ShivamTayal>
+C:\Users\ShivamTayal>mysql -u root -p --database=worktest < c:\Users\ShivamTayal\Desktop\work_bkp.sql
+Enter password:
+ERROR 1049 (42000): Unknown database 'worktest'
+
+C:\Users\ShivamTayal>mysql -u root -p --database=worktest < c:\Users\ShivamTayal\Desktop\work_bkp.sql
+Enter password:
+
+C:\Users\ShivamTayal>
