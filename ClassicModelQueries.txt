@@ -3664,4 +3664,128 @@ mysql> select * from productlines;
 +------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+-------+
 7 rows in set (0.02 sec)
 
+mysql> Select pl.productline,extract(month from o.orderDate) as Month,count(extract(month from o.orderDate)) from productlines pljoin products p on p.productline=pl.productline join orderdetails od on od.productcode=p.productcodejoin orders o on od.orderNumber=o.orderNumber group by pl.productline,Month;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'products p on p.productline=pl.productline join orderdetails od on od.productcod' at line 1
+mysql>
+mysql>
+mysql>
+mysql> Select pl.productline,extract(month from o.orderDate) as Month,count(extract(month from o.orderDate)) from productlines pljoin products p on p.productline=pl.productline join orderdetails od on od.productcode=p.productcodejoin orders o on od.orderNumber=o.orderNumber group by pl.productline,Month;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'products p on p.productline=pl.productline join orderdetails od on od.productcod' at line 1
+mysql>
+mysql>
+mysql> Select pl.productline,extract(month from o.orderDate) as Month,count(extract(month from o.orderDate)) from productlines pljoin products p on p.productline=pl.productline join orderdetails od on od.productcode=p.productcodejoin orders o on od.orderNumber=o.orderNumber group by pl.productline,Month;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'products p on p.productline=pl.productline join orderdetails od on od.productcod' at line 1
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select pl.productline,extract(month from o.orderdate) as Month, count(extract(month from o.orderData)) from productlines pl join products p on p.productline=pl.productline join orderdetails od on od.productcode=p.productcode join orders o on od.orderNumber=o.orderNumber group by pl.productline,Month;
+ERROR 1054 (42S22): Unknown column 'o.orderData' in 'field list'
+mysql> select pl.productline,extract(month from o.orderdate) as Month, count(extract(month from o.orderDate)) from productlines pl join products p on p.productline=pl.productline join orderdetails od on od.productcode=p.productcode join orders o on od.orderNumber=o.orderNumber group by pl.productline,Month;
++------------------+-------+----------------------------------------+
+| productline      | Month | count(extract(month from o.orderDate)) |
++------------------+-------+----------------------------------------+
+| Classic Cars     |     1 |                                     78 |
+| Classic Cars     |     2 |                                     74 |
+| Classic Cars     |     3 |                                     70 |
+| Classic Cars     |     4 |                                     63 |
+| Classic Cars     |     5 |                                     90 |
+| Classic Cars     |     6 |                                     46 |
+| Classic Cars     |     7 |                                     64 |
+| Classic Cars     |     8 |                                     65 |
+| Classic Cars     |     9 |                                     60 |
+| Classic Cars     |    10 |                                    112 |
+| Classic Cars     |    11 |                                    219 |
+| Classic Cars     |    12 |                                     69 |
+| Motorcycles      |     1 |                                     24 |
+| Motorcycles      |     2 |                                     34 |
+| Motorcycles      |     3 |                                     18 |
+| Motorcycles      |     4 |                                     40 |
+| Motorcycles      |     5 |                                     33 |
+| Motorcycles      |     6 |                                     14 |
+| Motorcycles      |     7 |                                     19 |
+| Motorcycles      |     8 |                                     31 |
+| Motorcycles      |     9 |                                     14 |
+| Motorcycles      |    10 |                                     33 |
+| Motorcycles      |    11 |                                     71 |
+| Motorcycles      |    12 |                                     28 |
+| Planes           |     1 |                                     17 |
+| Planes           |     2 |                                     31 |
+| Planes           |     3 |                                     27 |
+| Planes           |     4 |                                     33 |
+| Planes           |     5 |                                     24 |
+| Planes           |     6 |                                     24 |
+| Planes           |     7 |                                     12 |
+| Planes           |     8 |                                     24 |
+| Planes           |     9 |                                     12 |
+| Planes           |    10 |                                     36 |
+| Planes           |    11 |                                     66 |
+| Planes           |    12 |                                     30 |
+| Ships            |     1 |                                     18 |
+| Ships            |     2 |                                     21 |
+| Ships            |     3 |                                     24 |
+| Ships            |     4 |                                     11 |
+| Ships            |     5 |                                     18 |
+| Ships            |     6 |                                     18 |
+| Ships            |     7 |                                      9 |
+| Ships            |     8 |                                     18 |
+| Ships            |     9 |                                     15 |
+| Ships            |    10 |                                     27 |
+| Ships            |    11 |                                     48 |
+| Ships            |    12 |                                     18 |
+| Trains           |     1 |                                      7 |
+| Trains           |     2 |                                      7 |
+| Trains           |     3 |                                      6 |
+| Trains           |     4 |                                      3 |
+| Trains           |     5 |                                      6 |
+| Trains           |     6 |                                      6 |
+| Trains           |     7 |                                      3 |
+| Trains           |     8 |                                      6 |
+| Trains           |     9 |                                      6 |
+| Trains           |    10 |                                      9 |
+| Trains           |    11 |                                     15 |
+| Trains           |    12 |                                      7 |
+| Trucks and Buses |     1 |                                     23 |
+| Trucks and Buses |     2 |                                     21 |
+| Trucks and Buses |     3 |                                     25 |
+| Trucks and Buses |     4 |                                      8 |
+| Trucks and Buses |     5 |                                     40 |
+| Trucks and Buses |     6 |                                     15 |
+| Trucks and Buses |     7 |                                     18 |
+| Trucks and Buses |     8 |                                     15 |
+| Trucks and Buses |     9 |                                     22 |
+| Trucks and Buses |    10 |                                     33 |
+| Trucks and Buses |    11 |                                     62 |
+| Trucks and Buses |    12 |                                     26 |
+| Vintage Cars     |     1 |                                     62 |
+| Vintage Cars     |     2 |                                     38 |
+| Vintage Cars     |     3 |                                     62 |
+| Vintage Cars     |     4 |                                     45 |
+| Vintage Cars     |     5 |                                     50 |
+| Vintage Cars     |     6 |                                     32 |
+| Vintage Cars     |     7 |                                     40 |
+| Vintage Cars     |     8 |                                     32 |
+| Vintage Cars     |     9 |                                     42 |
+| Vintage Cars     |    10 |                                     73 |
+| Vintage Cars     |    11 |                                    135 |
+| Vintage Cars     |    12 |                                     46 |
++------------------+-------+----------------------------------------+
+84 rows in set (0.06 sec)
+
 mysql>
